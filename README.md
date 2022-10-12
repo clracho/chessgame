@@ -6,6 +6,6 @@ Has a PGN editor feature
 
 Created for: Python 3.8
 
-Implemented using: tkinter
+Implemented using: tkinter and numpy
 
 Date Created: Summer 2020
