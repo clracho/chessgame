@@ -1,12 +1,13 @@
 # Chess game with all the moves and rules of normal chess
 # Has a PGN editor feature
 # Created for: Python 3.8
-# Implemented using: tkinter
+# Implemented using: tkinter and numpy
 # Date Created: Summer 2020
 
 from tkinter import *
 from tkinter import messagebox
 import tkinter.font as tkfont
+import numpy as np
 
 root = Tk()
 root.title("Chessboard")
@@ -285,7 +286,7 @@ def move_piece(final_x, final_y, initial_y, initial_x, piece_moved, color_moved,
     update_array(final_x, final_y, initial_y, initial_x, piece_moved, color_moved)
     global en_passant_last
     global en_passant_list
-    if piece_moved == 'pawn' and abs(final_y - initial_y) == 2:
+    if piece_moved == 'pawn' and np.abs(final_y - initial_y) == 2:
         if color_moved == 'white':
             en_passant_list[0][final_x] = "yes"
         if color_moved == 'black':
@@ -863,7 +864,7 @@ def determine_king_check(piece_moved, color_moved, final_y, final_x, initial_x, 
                     if piece_list[king_y + (i - 1)][king_x + (j - 1)] == "king":
                         if color_list[king_y + (i - 1)][king_x + (j - 1)] == color_moved_opposite:
                             return piece_list[king_y + (i - 1)][king_x + (j - 1)], king_y + (i - 1), king_x + (j - 1)
-    if piece_moved == 'king' and abs(final_x - initial_x) == 2 and stage == 0:
+    if piece_moved == 'king' and np.abs(final_x - initial_x) == 2 and stage == 0:
         if final_x - initial_x > 0:
             if determine_king_check(piece_moved, color_moved, final_y, final_x - 1, -10, 0) != 'no check' or \
                     determine_king_check(piece_moved, color_moved, final_y, final_x - 2, -10, 0) != 'no check':
@@ -877,7 +878,7 @@ def determine_king_check(piece_moved, color_moved, final_y, final_x, initial_x, 
 
 def determine_move_piece(final_x, final_y, initial_y, initial_x, piece_moved, color_moved):
     if piece_moved == "king":
-        if abs(initial_x - final_x) <= 1 and abs(initial_y - final_y) <= 1:
+        if np.abs(initial_x - final_x) <= 1 and np.abs(initial_y - final_y) <= 1:
             return "success"
     if piece_moved == "king" and final_x - initial_x == 2 and king_moved_[get_king_type(color_moved)] == 'no' and \
             piece_list[final_y][7] == 'rook' and rook_moved_[get_rook_type(color_moved, final_y)] == "no":
@@ -900,22 +901,22 @@ def determine_move_piece(final_x, final_y, initial_y, initial_x, piece_moved, co
                 == "no":
             return "success"
     if piece_moved == "pawn" and final_x != initial_x and color_list[final_y][final_x] != 'empty':
-        if abs(final_x - initial_x) == 1 and final_y - initial_y == 1 and color_moved == 'black':
+        if np.abs(final_x - initial_x) == 1 and final_y - initial_y == 1 and color_moved == 'black':
             return "success"
-        if abs(final_x - initial_x) == 1 and initial_y - final_y == 1 and color_moved == 'white':
+        if np.abs(final_x - initial_x) == 1 and initial_y - final_y == 1 and color_moved == 'white':
             return "success"
     if piece_moved == "pawn" and final_x != initial_x and color_list[final_y][final_x] == 'empty':
-        if abs(final_x - initial_x) == 1 and final_y - initial_y == 1 and color_moved == 'black' and en_passant_last \
+        if np.abs(final_x - initial_x) == 1 and final_y - initial_y == 1 and color_moved == 'black' and en_passant_last \
                 == 1 and final_y == 5:
             if en_passant_list[0][final_x] == "yes":
                 return "success"
-        if abs(final_x - initial_x) == 1 and initial_y - final_y == 1 and color_moved == 'white' and en_passant_last \
+        if np.abs(final_x - initial_x) == 1 and initial_y - final_y == 1 and color_moved == 'white' and en_passant_last \
                 == 1 and final_y == 2:
             if en_passant_list[1][final_x] == "yes":
                 return "success"
     if piece_moved == "rook" or piece_moved == "queen":
         if final_y == initial_y:
-            x_distance = abs(final_x - initial_x)
+            x_distance = np.abs(final_x - initial_x)
             if final_x - initial_x > 0:
                 direction = 1
             else:
@@ -927,7 +928,7 @@ def determine_move_piece(final_x, final_y, initial_y, initial_x, piece_moved, co
             if not collision:
                 return "success"
         if final_x == initial_x:
-            y_distance = abs(final_y - initial_y)
+            y_distance = np.abs(final_y - initial_y)
             if final_y - initial_y > 0:
                 direction = 1
             else:
@@ -939,13 +940,13 @@ def determine_move_piece(final_x, final_y, initial_y, initial_x, piece_moved, co
             if not collision:
                 return "success"
     if piece_moved == "knight":
-        if abs(final_x - initial_x) == 1 and abs(final_y - initial_y) == 2:
+        if np.abs(final_x - initial_x) == 1 and np.abs(final_y - initial_y) == 2:
             return "success"
-        if abs(final_x - initial_x) == 2 and abs(final_y - initial_y) == 1:
+        if np.abs(final_x - initial_x) == 2 and np.abs(final_y - initial_y) == 1:
             return "success"
     if piece_moved == "bishop" or piece_moved == "queen":
-        if abs(final_x - initial_x) == abs(final_y - initial_y):
-            x_distance = abs(final_x - initial_x)
+        if np.abs(final_x - initial_x) == np.abs(final_y - initial_y):
+            x_distance = np.abs(final_x - initial_x)
             if final_y - initial_y < 0:
                 direction = -1
             else:
